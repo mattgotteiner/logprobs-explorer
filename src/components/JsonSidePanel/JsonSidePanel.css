@@ -7,19 +7,21 @@
 }
 
 .json-side-panel__copy-button {
-  background-color: var(--spa-color-surface-elevated);
-  border: 1px solid var(--spa-color-border);
+  background-color: var(--spa-color-primary);
+  border: 1px solid transparent;
   border-radius: 10px;
-  color: var(--spa-color-text);
+  color: #fff;
   flex-shrink: 0;
 }
 
 .json-side-panel__copy-button:disabled {
+  background-color: var(--spa-color-surface-elevated);
   border-color: var(--spa-color-border);
+  color: var(--spa-color-text-secondary);
 }
 
 .json-side-panel__copy-button:hover:not(:disabled) {
-  border-color: var(--spa-color-border-muted);
+  background-color: var(--spa-color-primary-hover);
 }
 
 .json-side-panel__content {
