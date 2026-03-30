@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type CSSProperties } from 'react'
 import { Button, FormField, ThemeToggle } from '@mattgotteiner/spa-ui-controls'
 import {
   BUILTIN_MODELS,
@@ -16,6 +16,19 @@ interface SettingsPanelProps {
   onReset: () => void
   onUpdate: (updates: Partial<AppSettings>) => void
   settings: AppSettings
+}
+
+interface SliderStyleProperties extends CSSProperties {
+  '--settings-range-progress'?: string
+}
+
+function getSliderStyle(value: number, minimum: number, maximum: number): SliderStyleProperties {
+  const boundedValue = Math.min(maximum, Math.max(minimum, value))
+  const progress = maximum === minimum ? 0 : ((boundedValue - minimum) / (maximum - minimum)) * 100
+
+  return {
+    '--settings-range-progress': `${progress}%`,
+  }
 }
 
 export function SettingsPanel({
@@ -60,6 +73,7 @@ export function SettingsPanel({
             value={settings.endpoint}
             onChange={(event) => onUpdate({ endpoint: event.target.value })}
             placeholder="https://your-resource.openai.azure.com"
+            required
           />
         </FormField>
 
@@ -75,6 +89,7 @@ export function SettingsPanel({
             value={settings.apiKey}
             onChange={(event) => onUpdate({ apiKey: event.target.value })}
             placeholder="Enter your Azure OpenAI API key"
+            required
           />
         </FormField>
 
@@ -87,6 +102,7 @@ export function SettingsPanel({
             id="settings-model"
             className="settings-panel__control"
             value={showCustomModelInput ? CUSTOM_MODEL_OPTION : settings.modelName}
+            required
             onChange={(event) => {
               const { value } = event.target
               if (value === CUSTOM_MODEL_OPTION) {
@@ -120,6 +136,7 @@ export function SettingsPanel({
               value={settings.modelName}
               onChange={(event) => onUpdate({ modelName: event.target.value })}
               placeholder="gpt-5.4-mini"
+              required
             />
           </FormField>
         ) : null}
@@ -174,6 +191,7 @@ export function SettingsPanel({
               max="2"
               step="0.1"
               value={settings.temperature ?? 1}
+              style={getSliderStyle(settings.temperature ?? 1, 0, 2)}
               onChange={(event) =>
                 onUpdate({ temperature: Number.parseFloat(event.target.value) })
               }
@@ -209,6 +227,7 @@ export function SettingsPanel({
               max="1"
               step="0.05"
               value={settings.topP ?? 1}
+              style={getSliderStyle(settings.topP ?? 1, 0, 1)}
               onChange={(event) => onUpdate({ topP: Number.parseFloat(event.target.value) })}
             />
           </FormField>
@@ -229,6 +248,7 @@ export function SettingsPanel({
                 max={MAX_TOP_LOGPROBS}
                 step="1"
                 value={settings.topLogprobs}
+                style={getSliderStyle(settings.topLogprobs, MIN_TOP_LOGPROBS, MAX_TOP_LOGPROBS)}
                 onChange={(event) =>
                   onUpdate({ topLogprobs: Number.parseInt(event.target.value || '0', 10) })
                 }
@@ -268,6 +288,11 @@ export function SettingsPanel({
                 max={MAX_MAX_OUTPUT_TOKENS}
                 step="1"
                 value={settings.maxOutputTokens}
+                style={getSliderStyle(
+                  settings.maxOutputTokens,
+                  MIN_MAX_OUTPUT_TOKENS,
+                  MAX_MAX_OUTPUT_TOKENS,
+                )}
                 onChange={(event) =>
                   onUpdate({ maxOutputTokens: Number.parseInt(event.target.value || '0', 10) })
                 }

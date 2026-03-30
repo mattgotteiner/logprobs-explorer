@@ -48,4 +48,23 @@ describe('useSettings', () => {
     expect(persisted.settings.topLogprobs).toBe(7)
     expect(persisted.settings.topP).toBe(0.85)
   })
+
+  it('clamps persisted max output tokens to the new minimum', () => {
+    window.localStorage.setItem(
+      APP_SETTINGS_STORAGE_KEY,
+      JSON.stringify({
+        settings: {
+          endpoint: 'https://example.openai.azure.com',
+          maxOutputTokens: 1,
+          modelName: 'gpt-5.4-mini',
+          topLogprobs: 5,
+        },
+        version: 1,
+      }),
+    )
+
+    const { result } = renderHook(() => useSettings())
+
+    expect(result.current.settings.maxOutputTokens).toBe(16)
+  })
 })
