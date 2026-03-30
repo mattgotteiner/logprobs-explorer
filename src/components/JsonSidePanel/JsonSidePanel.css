@@ -1,7 +1,7 @@
 .json-side-panel-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(15, 23, 42, 0.32);
+  background-color: var(--spa-color-overlay);
   z-index: 1100;
 }
 
@@ -11,16 +11,16 @@
   right: 0;
   bottom: 0;
   width: min(36rem, 100vw);
-  background-color: var(--color-surface-elevated);
-  border-left: 1px solid var(--color-border);
-  box-shadow: -12px 0 32px rgba(15, 23, 42, 0.18);
+  background-color: var(--spa-color-bg);
+  border-left: 1px solid var(--spa-color-border);
+  box-shadow: var(--spa-shadow-drawer);
   display: flex;
   flex-direction: column;
 }
 
 .json-side-panel__header {
   align-items: flex-start;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--spa-color-border);
   display: flex;
   gap: 1rem;
   justify-content: space-between;
@@ -28,7 +28,7 @@
 }
 
 .json-side-panel__eyebrow {
-  color: var(--color-text-muted);
+  color: var(--spa-color-text-muted);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -43,10 +43,10 @@
 
 .json-side-panel__close-button,
 .json-side-panel__copy-button {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background-color: var(--spa-color-surface-elevated);
+  border: 1px solid var(--spa-color-border);
   border-radius: 10px;
-  color: var(--color-text);
+  color: var(--spa-color-text);
   cursor: pointer;
   font: inherit;
 }
@@ -94,15 +94,15 @@
 
 .json-side-panel__json,
 .json-side-panel__empty {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background-color: var(--spa-color-surface);
+  border: 1px solid var(--spa-color-border);
   border-radius: 10px;
   margin: 0;
   padding: 0.85rem 0.95rem;
 }
 
 .json-side-panel__json {
-  color: var(--color-text);
+  color: var(--spa-color-text);
   font-family: 'Cascadia Code', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 0.85rem;
   line-height: 1.5;
@@ -112,7 +112,7 @@
 }
 
 .json-side-panel__empty {
-  color: var(--color-text-secondary);
+  color: var(--spa-color-text-secondary);
 }
 
 @media (max-width: 720px) {
