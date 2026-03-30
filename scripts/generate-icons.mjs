@@ -18,8 +18,11 @@ import { deflateSync } from 'zlib';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const publicDir = join(__dirname, '..', 'public');
 
-const BG_COLOR = '#4f46e5';
-const ACCENT_COLOR = '#c7d2fe';
+const BG_COLOR = '#1f1b4d';
+const TOKEN_COLOR = '#ffffff';
+const TOKEN_DETAIL_COLOR = '#312e81';
+const BAR_COLORS = ['#67e8f9', '#a5b4fc', '#c4b5fd'];
+const BASELINE_COLOR = '#4338ca';
 
 function drawIcon(size) {
   const canvas = createCanvas(size, size);
@@ -28,98 +31,77 @@ function drawIcon(size) {
   ctx.fillStyle = BG_COLOR;
   ctx.fillRect(0, 0, size, size);
 
-  const cardX = size * 0.0625;
-  const cardY = size * 0.0625;
-  const cardW = size * 0.875;
-  const cardH = size * 0.875;
-  const cardRadius = size * 0.14;
+  const tokenX = size * 0.12;
+  const tokenY = size * 0.18;
+  const tokenW = size * 0.5;
+  const tokenH = size * 0.24;
+  const tokenRadius = tokenH / 2;
 
-  roundRect(ctx, cardX, cardY, cardW, cardH, cardRadius);
-  ctx.fillStyle = '#ffffff';
+  roundRect(ctx, tokenX, tokenY, tokenW, tokenH, tokenRadius);
+  ctx.fillStyle = TOKEN_COLOR;
   ctx.fill();
 
-  const barHeight = size * 0.16;
-  const innerPadding = size * 0.085;
-  const gap = size * 0.06;
-  const columnTop = cardY + barHeight + innerPadding;
-  const columnHeight = cardH - barHeight - innerPadding * 1.3;
-  const leftColumnWidth = cardW * 0.4;
-  const rightColumnWidth = cardW * 0.3;
-  const dividerX = cardX + cardW * 0.5;
-
-  ctx.fillStyle = BG_COLOR;
-  roundRect(ctx, cardX, cardY, cardW, barHeight, cardRadius);
-  ctx.fill();
-
-  ctx.clearRect(cardX, cardY + barHeight * 0.62, cardW, barHeight * 0.5);
-
-  const dotY = cardY + barHeight * 0.48;
-  const dotRadius = Math.max(2, size * 0.035);
-  [0.16, 0.24, 0.32].forEach((position) => {
+  const dotY = tokenY + tokenH / 2;
+  const dotRadius = Math.max(2, size * 0.034);
+  [0.25, 0.45, 0.65].forEach((position) => {
     ctx.beginPath();
-    ctx.fillStyle = ACCENT_COLOR;
-    ctx.arc(cardX + cardW * position, dotY, dotRadius, 0, Math.PI * 2);
+    ctx.fillStyle = TOKEN_DETAIL_COLOR;
+    ctx.arc(tokenX + tokenW * position, dotY, dotRadius, 0, Math.PI * 2);
     ctx.fill();
   });
 
-  ctx.fillStyle = BG_COLOR;
+  ctx.fillStyle = BAR_COLORS[1];
   roundRect(
     ctx,
-    cardX + innerPadding,
-    columnTop,
-    leftColumnWidth,
-    columnHeight,
-    size * 0.05,
+    tokenX + tokenW * 0.83,
+    tokenY + tokenH * 0.2,
+    Math.max(2, size * 0.04),
+    tokenH * 0.6,
+    size * 0.02,
   );
   ctx.fill();
 
-  ctx.fillStyle = ACCENT_COLOR;
-  roundRect(
-    ctx,
-    dividerX + gap * 0.25,
-    columnTop,
-    rightColumnWidth,
-    columnHeight * 0.34,
-    size * 0.05,
-  );
-  ctx.fill();
+  const baselineX = size * 0.12;
+  const baselineY = size * 0.74;
+  const baselineW = size * 0.74;
+  const baselineH = Math.max(2, size * 0.035);
 
-  roundRect(
-    ctx,
-    dividerX + gap * 0.25,
-    columnTop + columnHeight * 0.42,
-    rightColumnWidth,
-    columnHeight * 0.18,
-    size * 0.05,
-  );
+  ctx.globalAlpha = 0.4;
+  ctx.fillStyle = BASELINE_COLOR;
+  roundRect(ctx, baselineX, baselineY, baselineW, baselineH, baselineH / 2);
   ctx.fill();
+  ctx.globalAlpha = 1;
 
-  roundRect(
-    ctx,
-    dividerX + gap * 0.25,
-    columnTop + columnHeight * 0.68,
-    rightColumnWidth,
-    columnHeight * 0.18,
-    size * 0.05,
-  );
-  ctx.fill();
+  const barWidth = size * 0.09;
+  const barGap = size * 0.045;
+  const barHeights = [size * 0.17, size * 0.28, size * 0.4];
+  const firstBarX = size * 0.58;
 
-  ctx.fillStyle = '#ffffff';
-  const lineInset = innerPadding * 0.7;
-  const lineHeight = Math.max(3, size * 0.06);
-  const lineRadius = lineHeight / 2;
-  const lineWidths = [0.72, 0.52, 0.63, 0.44];
-  lineWidths.forEach((ratio, index) => {
+  barHeights.forEach((barHeight, index) => {
+    const x = firstBarX + index * (barWidth + barGap);
+    const y = baselineY + baselineH - barHeight;
+    ctx.fillStyle = BAR_COLORS[index];
     roundRect(
       ctx,
-      cardX + innerPadding + lineInset,
-      columnTop + lineInset + index * (lineHeight + gap * 0.45),
-      leftColumnWidth * ratio,
-      lineHeight,
-      lineRadius,
+      x,
+      y,
+      barWidth,
+      barHeight,
+      barWidth / 2,
     );
     ctx.fill();
   });
+
+  ctx.beginPath();
+  ctx.fillStyle = '#ffffff';
+  ctx.arc(
+    firstBarX + (barWidth + barGap) * 2 + barWidth / 2,
+    baselineY - barHeights[2] - size * 0.05,
+    Math.max(2, size * 0.022),
+    0,
+    Math.PI * 2,
+  );
+  ctx.fill();
 
   return canvas;
 }
