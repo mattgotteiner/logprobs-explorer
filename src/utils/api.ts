@@ -298,6 +298,7 @@ export function extractExplorerResult(
     incompleteReason: extractIncompleteReason(response),
     outputText: extractOutputText(response),
     request,
+    responseJson: response,
     status: getString(response.status),
     tokenEntries: extractTokenEntries(response),
     usage: extractUsageSummary(response),

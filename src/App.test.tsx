@@ -143,5 +143,34 @@ describe('App', () => {
     expect(screen.getByText('retry later')).toBeInTheDocument()
     expect(screen.getByText('Partial response')).toBeInTheDocument()
   })
+
+  it('opens the request and response JSON panel from model output', async () => {
+    const user = userEvent.setup()
+
+    mockExplorerState.result = {
+      outputText: 'Hello world',
+      request: {
+        input: 'Explain logprobs',
+        model: 'gpt-5.4-mini',
+      },
+      responseJson: {
+        id: 'resp_123',
+        output_text: 'Hello world',
+        status: 'completed',
+      },
+      status: 'completed',
+      tokenEntries: [],
+    }
+
+    render(<App />)
+
+    await user.click(screen.getByLabelText('View request and response JSON'))
+
+    expect(screen.getByRole('dialog', { name: 'Request and response JSON' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Request JSON' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Response JSON' })).toBeInTheDocument()
+    expect(screen.getByText(/"model": "gpt-5.4-mini"/)).toBeInTheDocument()
+    expect(screen.getByText(/"id": "resp_123"/)).toBeInTheDocument()
+  })
 })
 

@@ -1,0 +1,122 @@
+.json-side-panel-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.32);
+  z-index: 1100;
+}
+
+.json-side-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(36rem, 100vw);
+  background-color: var(--color-surface-elevated);
+  border-left: 1px solid var(--color-border);
+  box-shadow: -12px 0 32px rgba(15, 23, 42, 0.18);
+  display: flex;
+  flex-direction: column;
+}
+
+.json-side-panel__header {
+  align-items: flex-start;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 1rem 1.1rem;
+}
+
+.json-side-panel__eyebrow {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.json-side-panel__title {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.json-side-panel__close-button,
+.json-side-panel__copy-button {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text);
+  cursor: pointer;
+  font: inherit;
+}
+
+.json-side-panel__close-button {
+  min-height: 2.25rem;
+  min-width: 2.25rem;
+}
+
+.json-side-panel__copy-button {
+  padding: 0.4rem 0.7rem;
+}
+
+.json-side-panel__copy-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.json-side-panel__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: auto;
+  padding: 1rem 1.1rem 1.25rem;
+}
+
+.json-side-panel__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.json-side-panel__section-header {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.json-side-panel__section-title {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.json-side-panel__json,
+.json-side-panel__empty {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  margin: 0;
+  padding: 0.85rem 0.95rem;
+}
+
+.json-side-panel__json {
+  color: var(--color-text);
+  font-family: 'Cascadia Code', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.json-side-panel__empty {
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 720px) {
+  .json-side-panel {
+    width: 100%;
+  }
+}
