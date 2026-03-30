@@ -1,77 +1,33 @@
-.json-side-panel-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: var(--spa-color-overlay);
-  z-index: 1100;
-}
-
-.json-side-panel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: min(36rem, 100vw);
-  background-color: var(--spa-color-bg);
-  border-left: 1px solid var(--spa-color-border);
-  box-shadow: var(--spa-shadow-drawer);
-  display: flex;
-  flex-direction: column;
-}
-
-.json-side-panel__header {
-  align-items: flex-start;
-  border-bottom: 1px solid var(--spa-color-border);
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-  padding: 1rem 1.1rem;
-}
-
-.json-side-panel__eyebrow {
-  color: var(--spa-color-text-muted);
+.json-side-panel__description {
+  display: inline-block;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  margin: 0 0 0.35rem;
   text-transform: uppercase;
 }
 
-.json-side-panel__title {
-  font-size: 1rem;
-  margin: 0;
-}
-
-.json-side-panel__close-button,
 .json-side-panel__copy-button {
-  background-color: var(--spa-color-surface-elevated);
-  border: 1px solid var(--spa-color-border);
+  background-color: var(--spa-color-primary);
+  border: 1px solid transparent;
   border-radius: 10px;
-  color: var(--spa-color-text);
-  cursor: pointer;
-  font: inherit;
-}
-
-.json-side-panel__close-button {
-  min-height: 2.25rem;
-  min-width: 2.25rem;
-}
-
-.json-side-panel__copy-button {
-  padding: 0.4rem 0.7rem;
+  color: #fff;
+  flex-shrink: 0;
 }
 
 .json-side-panel__copy-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
+  background-color: var(--spa-color-surface-elevated);
+  border-color: var(--spa-color-border);
+  color: var(--spa-color-text-secondary);
+}
+
+.json-side-panel__copy-button:hover:not(:disabled) {
+  background-color: var(--spa-color-primary-hover);
 }
 
 .json-side-panel__content {
   display: flex;
-  flex: 1;
   flex-direction: column;
   gap: 1rem;
-  overflow: auto;
-  padding: 1rem 1.1rem 1.25rem;
 }
 
 .json-side-panel__section {
@@ -113,10 +69,4 @@
 
 .json-side-panel__empty {
   color: var(--spa-color-text-secondary);
-}
-
-@media (max-width: 720px) {
-  .json-side-panel {
-    width: 100%;
-  }
 }
