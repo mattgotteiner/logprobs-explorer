@@ -1,0 +1,95 @@
+.settings-panel {
+  color: var(--spa-color-text);
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spa-space-3);
+  margin-bottom: var(--spa-space-5);
+}
+
+.settings-section--clear {
+  border-top: 1px solid var(--spa-color-border);
+  margin-bottom: 0;
+  padding-top: var(--spa-space-4);
+}
+
+.settings-section__title {
+  color: var(--spa-color-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.settings-section__notice {
+  color: var(--spa-color-text-muted);
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spa-space-2);
+}
+
+.settings-field__label {
+  color: var(--spa-color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.settings-field__theme-toggle {
+  align-self: flex-start;
+  flex-wrap: wrap;
+}
+
+.settings-panel__control,
+.settings-panel__range {
+  width: 100%;
+}
+
+.settings-panel__control {
+  background-color: var(--spa-color-surface);
+  border: 1px solid var(--spa-color-border);
+  border-radius: var(--spa-radius-md);
+  color: var(--spa-color-text);
+  min-height: 40px;
+  padding: 0.65rem 0.75rem;
+}
+
+.settings-panel__range {
+  accent-color: var(--spa-color-primary);
+}
+
+.settings-checkbox {
+  align-items: flex-start;
+  background-color: var(--spa-color-surface);
+  border: 1px solid var(--spa-color-border);
+  border-radius: var(--spa-radius-md);
+  cursor: pointer;
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+}
+
+.settings-checkbox input {
+  accent-color: var(--spa-color-primary);
+  margin-top: 0.2rem;
+}
+
+.settings-checkbox__hint {
+  color: var(--spa-color-text-muted);
+  display: block;
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
+}
+
+.settings-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
