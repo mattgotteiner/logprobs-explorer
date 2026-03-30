@@ -75,17 +75,18 @@
   flex: 1 1 auto;
 }
 
-.settings-panel__range-with-endpoints {
-  align-items: center;
+.settings-panel__range-with-bounds {
   display: flex;
   flex: 1 1 auto;
-  gap: 0.6rem;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
-.settings-panel__range-endpoint {
+.settings-panel__range-bounds {
   color: var(--spa-color-text-muted);
+  display: flex;
   font-size: 0.85rem;
-  white-space: nowrap;
+  justify-content: space-between;
 }
 
 .settings-panel__range-input-group-number {
