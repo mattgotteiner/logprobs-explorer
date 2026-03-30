@@ -6,7 +6,7 @@ export const CUSTOM_MODEL_OPTION = '__custom__'
 export const DEFAULT_TOP_LOGPROBS = 5
 export const MIN_TOP_LOGPROBS = 1
 export const MAX_TOP_LOGPROBS = 20
-export const MIN_MAX_OUTPUT_TOKENS = 16
+export const MIN_MAX_OUTPUT_TOKENS = 1
 export const MAX_MAX_OUTPUT_TOKENS = 4096
 
 export const BUILTIN_MODELS = [

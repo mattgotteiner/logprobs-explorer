@@ -75,6 +75,20 @@
   flex: 1 1 auto;
 }
 
+.settings-panel__range-with-bounds {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.settings-panel__range-bounds {
+  color: var(--spa-color-text-muted);
+  display: flex;
+  font-size: 0.85rem;
+  justify-content: space-between;
+}
+
 .settings-panel__range-input-group-number {
   flex: 0 0 112px;
 }
