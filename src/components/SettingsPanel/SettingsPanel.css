@@ -53,12 +53,12 @@
 }
 
 .settings-panel__control {
-  background-color: var(--spa-color-surface);
-  border: 1px solid var(--spa-color-border);
+  background-color: var(--spa-color-bg);
+  border: 1px solid var(--spa-color-border-muted);
   border-radius: var(--spa-radius-md);
   color: var(--spa-color-text);
-  min-height: 40px;
-  padding: 0.65rem 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.75rem 0.85rem;
 }
 
 .settings-panel__range {
@@ -83,8 +83,8 @@
     to right,
     var(--spa-color-primary) 0,
     var(--spa-color-primary) var(--settings-range-progress),
-    var(--spa-color-border) var(--settings-range-progress),
-    var(--spa-color-border) 100%
+    var(--spa-color-border-muted) var(--settings-range-progress),
+    var(--spa-color-border-muted) 100%
   );
   border-radius: 999px;
   height: var(--settings-range-track-height);
@@ -93,17 +93,17 @@
 .settings-panel__range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  background-color: var(--spa-color-surface);
+  background-color: var(--spa-color-bg);
   border: 2px solid var(--spa-color-primary);
   border-radius: 50%;
-  box-shadow: 0 0 0 1px var(--spa-color-border);
+  box-shadow: 0 0 0 1px var(--spa-color-border-muted);
   height: var(--settings-range-thumb-size);
   margin-top: calc((var(--settings-range-track-height) - var(--settings-range-thumb-size)) / 2);
   width: var(--settings-range-thumb-size);
 }
 
 .settings-panel__range::-moz-range-track {
-  background-color: var(--spa-color-border);
+  background-color: var(--spa-color-border-muted);
   border: none;
   border-radius: 999px;
   height: var(--settings-range-track-height);
@@ -116,24 +116,24 @@
 }
 
 .settings-panel__range::-moz-range-thumb {
-  background-color: var(--spa-color-surface);
+  background-color: var(--spa-color-bg);
   border: 2px solid var(--spa-color-primary);
   border-radius: 50%;
-  box-shadow: 0 0 0 1px var(--spa-color-border);
+  box-shadow: 0 0 0 1px var(--spa-color-border-muted);
   height: var(--settings-range-thumb-size);
   width: var(--settings-range-thumb-size);
 }
 
 .settings-panel__range:focus-visible::-webkit-slider-thumb {
   box-shadow:
-    0 0 0 1px var(--spa-color-border),
-    0 0 0 4px color-mix(in srgb, var(--spa-color-primary) 24%, transparent);
+    0 0 0 1px var(--spa-color-border-muted),
+    0 0 0 4px var(--spa-color-focus-ring);
 }
 
 .settings-panel__range:focus-visible::-moz-range-thumb {
   box-shadow:
-    0 0 0 1px var(--spa-color-border),
-    0 0 0 4px color-mix(in srgb, var(--spa-color-primary) 24%, transparent);
+    0 0 0 1px var(--spa-color-border-muted),
+    0 0 0 4px var(--spa-color-focus-ring);
 }
 
 .settings-panel__range-input-group {
@@ -167,8 +167,8 @@
 
 .settings-checkbox {
   align-items: flex-start;
-  background-color: var(--spa-color-surface);
-  border: 1px solid var(--spa-color-border);
+  background-color: var(--spa-color-bg);
+  border: 1px solid var(--spa-color-border-muted);
   border-radius: var(--spa-radius-md);
   cursor: pointer;
   display: flex;
