@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { SettingsDrawer } from '@mattgotteiner/spa-ui-controls'
 import './JsonSidePanel.css'
 
 interface JsonSidePanelProps {
@@ -55,48 +56,22 @@ export function JsonSidePanel({
   requestJson,
   responseJson,
 }: JsonSidePanelProps): React.ReactElement | null {
-  const handleOverlayClick = useCallback(
-    (event: React.MouseEvent<HTMLDivElement>) => {
-      if (event.target === event.currentTarget) {
-        onClose()
-      }
-    },
-    [onClose],
-  )
-
   if (!isOpen) {
     return null
   }
 
   return (
-    <div className="json-side-panel-overlay" onClick={handleOverlayClick}>
-      <aside
-        className="json-side-panel"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Request and response JSON"
-      >
-        <div className="json-side-panel__header">
-          <div>
-            <p className="json-side-panel__eyebrow">Debug</p>
-            <h2 className="json-side-panel__title">Request and response JSON</h2>
-          </div>
-          <button
-            type="button"
-            className="json-side-panel__close-button"
-            onClick={onClose}
-            aria-label="Close JSON panel"
-            title="Close"
-          >
-            ✕
-          </button>
-        </div>
-
-        <div className="json-side-panel__content">
-          <JsonSection title="Request JSON" json={requestJson} />
-          <JsonSection title="Response JSON" json={responseJson} />
-        </div>
-      </aside>
-    </div>
+    <SettingsDrawer
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Request and response JSON"
+      description={<span className="json-side-panel__description">Debug</span>}
+      width="36rem"
+    >
+      <div className="json-side-panel__content">
+        <JsonSection title="Request JSON" json={requestJson} />
+        <JsonSection title="Response JSON" json={responseJson} />
+      </div>
+    </SettingsDrawer>
   )
 }

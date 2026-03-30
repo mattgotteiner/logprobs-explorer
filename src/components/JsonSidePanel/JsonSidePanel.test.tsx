@@ -42,7 +42,7 @@ describe('JsonSidePanel', () => {
       <JsonSidePanel isOpen onClose={onClose} requestJson={{}} responseJson={{}} />,
     )
 
-    fireEvent.click(screen.getByLabelText('Close JSON panel'))
+    fireEvent.click(screen.getByRole('button', { name: /close/i }))
 
     expect(onClose).toHaveBeenCalledTimes(1)
   })
