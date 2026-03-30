@@ -58,6 +58,20 @@ describe('App', () => {
     expect(screen.getByLabelText('Input text')).toHaveAttribute('rows', '6')
   })
 
+  it('shows a required-settings badge until endpoint and API key are provided', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    const settingsButton = screen.getByLabelText('Open settings')
+    expect(settingsButton.querySelector('.spa-settings-button__badge')).toBeInTheDocument()
+
+    await user.click(settingsButton)
+    await user.type(screen.getByLabelText('Endpoint URL'), 'https://example.openai.azure.com')
+    await user.type(screen.getByLabelText('API key'), 'secret-key')
+
+    expect(settingsButton.querySelector('.spa-settings-button__badge')).not.toBeInTheDocument()
+  })
+
   it('opens settings and renders the updated generation controls', async () => {
     const user = userEvent.setup()
     render(<App />)
