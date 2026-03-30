@@ -8,6 +8,7 @@ import {
   TopBar,
 } from '@mattgotteiner/spa-ui-controls'
 import './App.css'
+import { JsonSidePanel } from './components/JsonSidePanel'
 import { SettingsSidebar } from './components/SettingsSidebar/SettingsSidebar'
 import { SettingsProvider, useSettingsContext } from './context/SettingsContext'
 import { useLogprobsExplorer } from './hooks/useLogprobsExplorer'
@@ -108,6 +109,7 @@ function AppContent(): React.ReactElement {
   const { clearResult, error, isRunning, progress, result, runTest, streamedOutputText } =
     useLogprobsExplorer()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [isJsonPanelOpen, setIsJsonPanelOpen] = useState(false)
   const [prompt, setPrompt] = useState('')
   const hasApiKey = settings.apiKey.trim().length > 0
 
@@ -144,6 +146,7 @@ function AppContent(): React.ReactElement {
   const canRun = isConfigured && prompt.trim().length > 0 && !isRunning
   const responseText = streamedOutputText || result?.outputText || ''
   const responseStatus = result?.status ?? (isRunning ? getProgressTitle(progress?.phase) : undefined)
+  const hasJsonPanelData = Boolean(result?.request || result?.responseJson)
 
   return (
     <ThemeProvider
@@ -272,9 +275,21 @@ function AppContent(): React.ReactElement {
                 <section className="response-panel" aria-label="Response preview">
                   <div className="response-panel__header">
                     <h3 className="response-panel__title">Model output</h3>
-                    {responseStatus ? (
-                      <span className="response-panel__meta">Status: {responseStatus}</span>
-                    ) : null}
+                    <div className="response-panel__header-actions">
+                      {responseStatus ? (
+                        <span className="response-panel__meta">Status: {responseStatus}</span>
+                      ) : null}
+                      <button
+                        type="button"
+                        className={`response-panel__json-button ${!hasJsonPanelData ? 'response-panel__json-button--hidden' : ''}`}
+                        onClick={() => setIsJsonPanelOpen(true)}
+                        aria-label="View request and response JSON"
+                        title="View request and response JSON"
+                        disabled={!hasJsonPanelData}
+                      >
+                        {'{ }'}
+                      </button>
+                    </div>
                   </div>
 
                   {responseText.length > 0 ? (
@@ -363,6 +378,12 @@ function AppContent(): React.ReactElement {
           onReset={resetSettings}
           onUpdate={updateSettings}
           settings={settings}
+        />
+        <JsonSidePanel
+          isOpen={isJsonPanelOpen && hasJsonPanelData}
+          onClose={() => setIsJsonPanelOpen(false)}
+          requestJson={result?.request}
+          responseJson={result?.responseJson}
         />
       </AppShell>
     </ThemeProvider>

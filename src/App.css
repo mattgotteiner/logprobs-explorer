@@ -233,6 +233,14 @@
   justify-content: space-between;
 }
 
+.response-panel__header-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
 .response-panel__title {
   font-size: 1rem;
   margin: 0;
@@ -254,6 +262,26 @@
   overflow-x: auto;
   padding: 0.9rem 1rem;
   white-space: pre-wrap;
+}
+
+.response-panel__json-button {
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text);
+  cursor: pointer;
+  font: inherit;
+  min-height: 2.1rem;
+  min-width: 2.7rem;
+  padding: 0 0.7rem;
+}
+
+.response-panel__json-button--hidden {
+  visibility: hidden;
+}
+
+.response-panel__json-button:disabled {
+  cursor: not-allowed;
 }
 
 .results-section {

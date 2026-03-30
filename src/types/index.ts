@@ -61,6 +61,7 @@ export interface ExplorerResult {
   incompleteReason?: string
   outputText: string
   request: Record<string, unknown>
+  responseJson?: Record<string, unknown>
   status?: string
   tokenEntries: TokenLogprobEntry[]
   usage?: ResponseUsageSummary

@@ -111,6 +111,10 @@ describe('api utilities', () => {
 
     expect(result.outputText).toBe('Hello')
     expect(result.incompleteReason).toBe('max_output_tokens')
+    expect(result.responseJson).toMatchObject({
+      output_text: 'Hello',
+      status: 'completed',
+    })
     expect(result.tokenEntries).toHaveLength(1)
     expect(result.tokenEntries[0]?.token).toBe('Hello')
     expect(result.tokenEntries[0]?.probability).toBeCloseTo(Math.exp(-0.2))
