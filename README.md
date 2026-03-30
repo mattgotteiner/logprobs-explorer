@@ -8,7 +8,7 @@ It keeps the `spa-starter` structure and shell patterns, then layers on:
 - encrypted API key persistence in the browser when supported
 - model / deployment selection with reasoning fixed to `none`
 - optional `temperature` and `top_p` controls
-- bounded `max_output_tokens` with a default of `5`
+- bounded `max_output_tokens` with a default and minimum of `16`
 - streamed output preview with clearer request progress and inline API error details
 - token-by-token display of chosen logprobs, top alternatives, and linear probabilities
 

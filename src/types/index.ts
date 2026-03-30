@@ -6,7 +6,7 @@ export const CUSTOM_MODEL_OPTION = '__custom__'
 export const DEFAULT_TOP_LOGPROBS = 5
 export const MIN_TOP_LOGPROBS = 1
 export const MAX_TOP_LOGPROBS = 20
-export const MIN_MAX_OUTPUT_TOKENS = 1
+export const MIN_MAX_OUTPUT_TOKENS = 16
 export const MAX_MAX_OUTPUT_TOKENS = 4096
 
 export const BUILTIN_MODELS = [
@@ -79,7 +79,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   apiKey: '',
   deploymentName: '',
   endpoint: '',
-  maxOutputTokens: 5,
+  maxOutputTokens: 16,
   modelName: 'gpt-5.4-mini',
   temperature: 1,
   temperatureEnabled: false,
