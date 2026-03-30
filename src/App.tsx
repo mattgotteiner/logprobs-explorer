@@ -253,13 +253,9 @@ function AppContent(): React.ReactElement {
                   <div className="app-callout app-callout--danger composer-error">
                     <p className="composer-error__title">Request failed</p>
                     <p className="composer-error__message">{error.message}</p>
-                    {error.status !== undefined ||
-                    error.code ||
-                    error.type ||
-                    error.requestId ? (
+                    {error.status !== undefined || error.type || error.requestId ? (
                       <div className="composer-error__meta">
                         {error.status !== undefined ? <span>Status {error.status}</span> : null}
-                        {error.code ? <span>Code {error.code}</span> : null}
                         {error.type ? <span>Type {error.type}</span> : null}
                         {error.requestId ? <span>Request ID {error.requestId}</span> : null}
                       </div>
