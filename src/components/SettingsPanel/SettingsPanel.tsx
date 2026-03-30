@@ -220,7 +220,10 @@ export function SettingsPanel({
           label="Top logprobs"
         >
           <div className="settings-panel__range-input-group">
-            <div className="settings-panel__range-with-bounds">
+            <div className="settings-panel__range-with-endpoints">
+              <span className="settings-panel__range-endpoint" aria-hidden="true">
+                {MIN_TOP_LOGPROBS}
+              </span>
               <input
                 aria-label="Top logprobs slider"
                 className="settings-panel__range settings-panel__range-input-group-slider"
@@ -233,10 +236,9 @@ export function SettingsPanel({
                   onUpdate({ topLogprobs: Number.parseInt(event.target.value || '0', 10) })
                 }
               />
-              <div className="settings-panel__range-bounds" aria-hidden="true">
-                <span>{MIN_TOP_LOGPROBS}</span>
-                <span>{MAX_TOP_LOGPROBS}</span>
-              </div>
+              <span className="settings-panel__range-endpoint" aria-hidden="true">
+                {MAX_TOP_LOGPROBS}
+              </span>
             </div>
             <input
               id="settings-top-logprobs"
@@ -259,7 +261,10 @@ export function SettingsPanel({
           label="Max output tokens"
         >
           <div className="settings-panel__range-input-group">
-            <div className="settings-panel__range-with-bounds">
+            <div className="settings-panel__range-with-endpoints">
+              <span className="settings-panel__range-endpoint" aria-hidden="true">
+                {MIN_MAX_OUTPUT_TOKENS}
+              </span>
               <input
                 aria-label="Max output tokens slider"
                 className="settings-panel__range settings-panel__range-input-group-slider"
@@ -272,10 +277,9 @@ export function SettingsPanel({
                   onUpdate({ maxOutputTokens: Number.parseInt(event.target.value || '0', 10) })
                 }
               />
-              <div className="settings-panel__range-bounds" aria-hidden="true">
-                <span>{MIN_MAX_OUTPUT_TOKENS}</span>
-                <span>{MAX_MAX_OUTPUT_TOKENS}</span>
-              </div>
+              <span className="settings-panel__range-endpoint" aria-hidden="true">
+                {MAX_MAX_OUTPUT_TOKENS}
+              </span>
             </div>
             <input
               id="settings-max-output-tokens"
