@@ -1,6 +1,8 @@
 import OpenAI from 'openai'
+import { APIError } from 'openai/error'
 import type {
   AppSettings,
+  ExplorerErrorDetails,
   ExplorerResult,
   LogprobCandidate,
   ResponseUsageSummary,
@@ -10,6 +12,12 @@ import type {
 interface AzureCredentials {
   apiKey: string
   endpoint: string
+}
+
+export interface LogprobsRequestProgressUpdate {
+  detail: string
+  outputText: string
+  phase: 'starting' | 'waiting' | 'streaming' | 'finalizing'
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -166,6 +174,7 @@ export function createAzureClient(credentials: AzureCredentials): OpenAI {
 export function buildExplorerRequest(
   prompt: string,
   settings: AppSettings,
+  options: { stream?: boolean } = {},
 ): Record<string, unknown> {
   const deployment = settings.deploymentName.trim() || settings.modelName.trim()
 
@@ -180,6 +189,10 @@ export function buildExplorerRequest(
     top_logprobs: settings.topLogprobs,
   }
 
+  if (options.stream) {
+    request.stream = true
+  }
+
   if (settings.temperatureEnabled) {
     request.temperature = settings.temperature ?? 1
   }
@@ -189,6 +202,51 @@ export function buildExplorerRequest(
   }
 
   return request
+}
+
+function stringifyErrorBody(value: unknown): string | undefined {
+  if (value === undefined) {
+    return undefined
+  }
+
+  if (typeof value === 'string') {
+    return value
+  }
+
+  try {
+    return JSON.stringify(value, null, 2)
+  } catch {
+    return String(value)
+  }
+}
+
+export function toExplorerErrorDetails(error: unknown): ExplorerErrorDetails {
+  if (error instanceof APIError) {
+    const apiErrorBody = stringifyErrorBody(error.error)
+    const apiErrorMessage =
+      isRecord(error.error) && typeof error.error.message === 'string'
+        ? error.error.message
+        : error.message
+
+    return {
+      body: apiErrorBody,
+      code: error.code,
+      message: apiErrorMessage || 'The request failed.',
+      requestId: error.requestID,
+      status: error.status,
+      type: error.type,
+    }
+  }
+
+  if (error instanceof Error) {
+    return {
+      message: error.message,
+    }
+  }
+
+  return {
+    message: 'The request failed.',
+  }
 }
 
 export function extractExplorerResult(
@@ -216,16 +274,50 @@ export function extractExplorerResult(
 export async function runLogprobsRequest(
   prompt: string,
   settings: AppSettings,
+  onProgress?: (update: LogprobsRequestProgressUpdate) => void,
 ): Promise<ExplorerResult> {
   const client = createAzureClient({
     apiKey: settings.apiKey.trim(),
     endpoint: settings.endpoint.trim(),
   })
 
-  const request = buildExplorerRequest(prompt, settings)
-  const response = await client.responses.create(
-    request as Parameters<typeof client.responses.create>[0],
-  )
+  const request = buildExplorerRequest(prompt, settings, { stream: true })
+  let outputText = ''
+  const emitProgress = (
+    phase: LogprobsRequestProgressUpdate['phase'],
+    detail: string,
+  ): void => {
+    onProgress?.({
+      detail,
+      outputText,
+      phase,
+    })
+  }
+
+  emitProgress('starting', 'Connecting to Azure OpenAI...')
+
+  const stream = client.responses.stream(request as Parameters<typeof client.responses.stream>[0])
+
+  stream.on('response.created', () => {
+    emitProgress('waiting', 'Request started. Waiting for the first streamed tokens...')
+  })
+
+  stream.on('response.in_progress', () => {
+    if (outputText.length === 0) {
+      emitProgress('waiting', 'Model is preparing a streamed response...')
+    }
+  })
+
+  stream.on('response.output_text.delta', (event) => {
+    outputText = event.snapshot
+    emitProgress('streaming', 'Streaming output from Azure OpenAI...')
+  })
+
+  stream.on('response.completed', () => {
+    emitProgress('finalizing', 'Stream complete. Collecting final token logprobs...')
+  })
+
+  const response = await stream.finalResponse()
 
   return extractExplorerResult(response as unknown, request)
 }

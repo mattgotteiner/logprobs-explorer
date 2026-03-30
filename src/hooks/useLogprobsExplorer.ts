@@ -1,37 +1,51 @@
 import { useCallback, useState } from 'react'
-import type { AppSettings, ExplorerResult } from '../types'
-import { runLogprobsRequest } from '../utils/api'
+import type { AppSettings, ExplorerErrorDetails, ExplorerResult } from '../types'
+import {
+  runLogprobsRequest,
+  toExplorerErrorDetails,
+  type LogprobsRequestProgressUpdate,
+} from '../utils/api'
 
 export interface UseLogprobsExplorerReturn {
   clearResult: () => void
-  error: string | null
+  error: ExplorerErrorDetails | null
   isRunning: boolean
+  progress: LogprobsRequestProgressUpdate | null
   result: ExplorerResult | null
+  streamedOutputText: string
   runTest: (prompt: string, settings: AppSettings) => Promise<void>
 }
 
-function toErrorMessage(error: unknown): string {
-  if (error instanceof Error) {
-    return error.message
-  }
-
-  return 'The request failed.'
-}
-
 export function useLogprobsExplorer(): UseLogprobsExplorerReturn {
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<ExplorerErrorDetails | null>(null)
   const [isRunning, setIsRunning] = useState(false)
+  const [progress, setProgress] = useState<LogprobsRequestProgressUpdate | null>(null)
   const [result, setResult] = useState<ExplorerResult | null>(null)
+  const [streamedOutputText, setStreamedOutputText] = useState('')
 
   const runTest = useCallback(async (prompt: string, settings: AppSettings) => {
     setError(null)
     setIsRunning(true)
+    setProgress({
+      detail: 'Connecting to Azure OpenAI...',
+      outputText: '',
+      phase: 'starting',
+    })
+    setResult(null)
+    setStreamedOutputText('')
 
     try {
-      const nextResult = await runLogprobsRequest(prompt, settings)
+      const nextResult = await runLogprobsRequest(prompt, settings, (nextProgress) => {
+        setProgress(nextProgress)
+        setStreamedOutputText(nextProgress.outputText)
+      })
       setResult(nextResult)
+      setStreamedOutputText(nextResult.outputText)
+      setProgress(null)
     } catch (nextError) {
-      setError(toErrorMessage(nextError))
+      setError(toExplorerErrorDetails(nextError))
+      setResult(null)
+      setProgress(null)
     } finally {
       setIsRunning(false)
     }
@@ -39,14 +53,18 @@ export function useLogprobsExplorer(): UseLogprobsExplorerReturn {
 
   const clearResult = useCallback(() => {
     setError(null)
+    setProgress(null)
     setResult(null)
+    setStreamedOutputText('')
   }, [])
 
   return {
     clearResult,
     error,
     isRunning,
+    progress,
     result,
+    streamedOutputText,
     runTest,
   }
 }

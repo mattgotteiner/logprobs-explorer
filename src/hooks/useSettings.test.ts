@@ -13,7 +13,7 @@ describe('useSettings', () => {
 
     expect(result.current.settings.modelName).toBe('gpt-5.4-mini')
     expect(result.current.settings.theme).toBe('system')
-    expect(result.current.settings.maxOutputTokens).toBe(256)
+    expect(result.current.settings.maxOutputTokens).toBe(5)
     expect(result.current.settings.temperatureEnabled).toBe(false)
     expect(result.current.settings.topLogprobs).toBe(5)
   })

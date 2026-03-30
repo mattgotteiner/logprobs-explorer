@@ -8,7 +8,8 @@ It keeps the `spa-starter` structure and shell patterns, then layers on:
 - encrypted API key persistence in the browser when supported
 - model / deployment selection with reasoning fixed to `none`
 - optional `temperature` and `top_p` controls
-- bounded `max_output_tokens`
+- bounded `max_output_tokens` with a default of `5`
+- streamed output preview with clearer request progress and inline API error details
 - token-by-token display of chosen logprobs, top alternatives, and linear probabilities
 
 ## Prerequisites
@@ -25,7 +26,7 @@ npm install
 npm run dev
 ```
 
-Then open the Vite URL, configure your Azure OpenAI settings in the sidebar, paste a prompt, and click `Test`.
+Then open the Vite URL, configure your Azure OpenAI settings in the sidebar, paste a prompt, and click `Run test`.
 
 ## Quality commands
 

@@ -66,11 +66,20 @@ export interface ExplorerResult {
   usage?: ResponseUsageSummary
 }
 
+export interface ExplorerErrorDetails {
+  body?: string
+  code?: string | null
+  message: string
+  requestId?: string | null
+  status?: number
+  type?: string
+}
+
 export const DEFAULT_SETTINGS: AppSettings = {
   apiKey: '',
   deploymentName: '',
   endpoint: '',
-  maxOutputTokens: 256,
+  maxOutputTokens: 5,
   modelName: 'gpt-5.4-mini',
   temperature: 1,
   temperatureEnabled: false,
