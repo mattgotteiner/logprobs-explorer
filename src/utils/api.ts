@@ -1,6 +1,11 @@
 import OpenAI from 'openai'
-import type { AppSettings, ExplorerResult, LogprobCandidate, ResponseUsageSummary, TokenLogprobEntry } from '../types'
-import { TOP_LOGPROBS_COUNT } from '../types'
+import type {
+  AppSettings,
+  ExplorerResult,
+  LogprobCandidate,
+  ResponseUsageSummary,
+  TokenLogprobEntry,
+} from '../types'
 
 interface AzureCredentials {
   apiKey: string
@@ -81,7 +86,9 @@ function extractUsageSummary(response: Record<string, unknown>): ResponseUsageSu
   return {
     inputTokens: getNumber(usage.input_tokens),
     outputTokens: getNumber(usage.output_tokens),
-    reasoningTokens: outputTokensDetails ? getNumber(outputTokensDetails.reasoning_tokens) : undefined,
+    reasoningTokens: outputTokensDetails
+      ? getNumber(outputTokensDetails.reasoning_tokens)
+      : undefined,
     totalTokens: getNumber(usage.total_tokens),
   }
 }
@@ -95,12 +102,20 @@ function extractTokenEntries(response: Record<string, unknown>): TokenLogprobEnt
   const tokenEntries: TokenLogprobEntry[] = []
 
   for (const outputItem of response.output) {
-    if (!isRecord(outputItem) || outputItem.type !== 'message' || !Array.isArray(outputItem.content)) {
+    if (
+      !isRecord(outputItem) ||
+      outputItem.type !== 'message' ||
+      !Array.isArray(outputItem.content)
+    ) {
       continue
     }
 
     for (const contentPart of outputItem.content) {
-      if (!isRecord(contentPart) || contentPart.type !== 'output_text' || !Array.isArray(contentPart.logprobs)) {
+      if (
+        !isRecord(contentPart) ||
+        contentPart.type !== 'output_text' ||
+        !Array.isArray(contentPart.logprobs)
+      ) {
         continue
       }
 
@@ -157,13 +172,12 @@ export function buildExplorerRequest(
   const request: Record<string, unknown> = {
     include: ['message.output_text.logprobs'],
     input: prompt,
-    logprobs: true,
     max_output_tokens: settings.maxOutputTokens,
     model: deployment,
     reasoning: {
       effort: 'none',
     },
-    top_logprobs: TOP_LOGPROBS_COUNT,
+    top_logprobs: settings.topLogprobs,
   }
 
   if (settings.temperatureEnabled) {

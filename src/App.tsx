@@ -11,7 +11,7 @@ import './App.css'
 import { SettingsSidebar } from './components/SettingsSidebar/SettingsSidebar'
 import { SettingsProvider, useSettingsContext } from './context/SettingsContext'
 import { useLogprobsExplorer } from './hooks/useLogprobsExplorer'
-import { APP_TITLE, TOP_LOGPROBS_COUNT, type TokenLogprobEntry } from './types'
+import { APP_TITLE, type TokenLogprobEntry } from './types'
 
 const REPOSITORY_URL = 'https://github.com/mattgotteiner/logprobs-explorer'
 
@@ -77,27 +77,21 @@ function AppContent(): React.ReactElement {
   const { clearResult, error, isRunning, result, runTest } = useLogprobsExplorer()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [prompt, setPrompt] = useState('')
+  const hasApiKey = settings.apiKey.trim().length > 0
 
-  const statusCards = useMemo(
+  const requestSummary = useMemo(
     () => [
-      {
-        label: 'Model',
-        value: settings.deploymentName.trim() || settings.modelName || 'Not set',
-      },
-      {
-        label: 'Reasoning effort',
-        value: 'none',
-      },
-      {
-        label: 'Top logprobs',
-        value: String(TOP_LOGPROBS_COUNT),
-      },
-      {
-        label: 'Max output tokens',
-        value: String(settings.maxOutputTokens),
-      },
+      ['Model', settings.deploymentName.trim() || settings.modelName || 'Not set'],
+      ['Reasoning', 'none'],
+      ['Top logprobs', String(settings.topLogprobs)],
+      ['Max tokens', String(settings.maxOutputTokens)],
     ],
-    [settings.deploymentName, settings.maxOutputTokens, settings.modelName],
+    [
+      settings.deploymentName,
+      settings.maxOutputTokens,
+      settings.modelName,
+      settings.topLogprobs,
+    ],
   )
 
   const canRun = isConfigured && prompt.trim().length > 0 && !isRunning
@@ -190,19 +184,19 @@ function AppContent(): React.ReactElement {
                   onChange={(event) => setPrompt(event.target.value)}
                   placeholder="Explain why log probabilities are useful for debugging model output."
                   rows={12}
+                  disabled={!hasApiKey}
                 />
               </label>
 
-              {error ? <div className="app-callout app-callout--danger">{error}</div> : null}
-
-              <div className="summary-grid" aria-label="Request summary">
-                {statusCards.map((card) => (
-                  <section key={card.label} className="summary-card">
-                    <span className="summary-card__label">{card.label}</span>
-                    <div className="summary-card__value">{card.value}</div>
-                  </section>
+              <div className="request-summary" aria-label="Request summary">
+                {requestSummary.map(([label, value]) => (
+                  <span key={label} className="request-summary__item">
+                    <span className="request-summary__label">{label}:</span> {value}
+                  </span>
                 ))}
               </div>
+
+              {error ? <div className="app-callout app-callout--danger">{error}</div> : null}
 
               <section className="response-panel" aria-label="Response preview">
                 <div className="response-panel__header">
@@ -234,41 +228,39 @@ function AppContent(): React.ReactElement {
                   </p>
                 )}
               </section>
-            </div>
-          </Panel>
 
-          <Panel as="section">
-            <div className="explorer-panel">
-              <div className="explorer-panel__header">
-                <div>
-                  <p className="explorer-panel__eyebrow">Results</p>
-                  <h2 className="explorer-panel__title">Token-by-token logprobs</h2>
+              <section className="results-section" aria-label="Token logprob results">
+                <div className="explorer-panel__header">
+                  <div>
+                    <p className="explorer-panel__eyebrow">Results</p>
+                    <h2 className="explorer-panel__title">Token-by-token logprobs</h2>
+                  </div>
                 </div>
-              </div>
 
-              <p className="explorer-panel__body">
-                Each token shows the chosen token&apos;s log probability and linear probability, plus
-                the top returned alternatives for that token position.
-              </p>
+                <p className="explorer-panel__body">
+                  Each token shows the chosen token&apos;s log probability and linear probability, plus
+                  the top returned alternatives for that token position.
+                </p>
 
-              {result?.tokenEntries.length ? (
-                <div className="token-list">
-                  {result.tokenEntries.map((tokenEntry) => (
-                    <TokenCard key={`${tokenEntry.tokenIndex}-${tokenEntry.token}`} token={tokenEntry} />
-                  ))}
-                </div>
-              ) : (
-                <div className="results-empty">
-                  {result ? (
-                    <p>
-                      The response completed, but no output token logprobs were returned for this model or
-                      deployment.
-                    </p>
-                  ) : (
-                    <p>Run a test to populate the token explorer.</p>
-                  )}
-                </div>
-              )}
+                {result?.tokenEntries.length ? (
+                  <div className="token-list">
+                    {result.tokenEntries.map((tokenEntry) => (
+                      <TokenCard key={`${tokenEntry.tokenIndex}-${tokenEntry.token}`} token={tokenEntry} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="results-empty">
+                    {result ? (
+                      <p>
+                        The response completed, but no output token logprobs were returned for this model or
+                        deployment.
+                      </p>
+                    ) : (
+                      <p>Run a test to populate the token explorer.</p>
+                    )}
+                  </div>
+                )}
+              </section>
             </div>
           </Panel>
         </div>

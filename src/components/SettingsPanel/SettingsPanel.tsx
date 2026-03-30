@@ -4,7 +4,9 @@ import {
   BUILTIN_MODELS,
   CUSTOM_MODEL_OPTION,
   MAX_MAX_OUTPUT_TOKENS,
+  MAX_TOP_LOGPROBS,
   MIN_MAX_OUTPUT_TOKENS,
+  MIN_TOP_LOGPROBS,
   type AppSettings,
 } from '../../types'
 import './SettingsPanel.css'
@@ -213,22 +215,55 @@ export function SettingsPanel({
         ) : null}
 
         <FormField
+          hint={`How many alternative tokens to request at each output position (${MIN_TOP_LOGPROBS}-${MAX_TOP_LOGPROBS}).`}
+          htmlFor="settings-top-logprobs"
+          label="Top logprobs"
+        >
+          <input
+            id="settings-top-logprobs"
+            className="settings-panel__control"
+            type="number"
+            min={MIN_TOP_LOGPROBS}
+            max={MAX_TOP_LOGPROBS}
+            step="1"
+            value={settings.topLogprobs}
+            onChange={(event) =>
+              onUpdate({ topLogprobs: Number.parseInt(event.target.value || '0', 10) })
+            }
+          />
+        </FormField>
+
+        <FormField
           hint={`Bound the output length between ${MIN_MAX_OUTPUT_TOKENS} and ${MAX_MAX_OUTPUT_TOKENS} tokens.`}
           htmlFor="settings-max-output-tokens"
           label="Max output tokens"
         >
-          <input
-            id="settings-max-output-tokens"
-            className="settings-panel__control"
-            type="number"
-            min={MIN_MAX_OUTPUT_TOKENS}
-            max={MAX_MAX_OUTPUT_TOKENS}
-            step="1"
-            value={settings.maxOutputTokens}
-            onChange={(event) =>
-              onUpdate({ maxOutputTokens: Number.parseInt(event.target.value || '0', 10) })
-            }
-          />
+          <div className="settings-panel__range-input-group">
+            <input
+              aria-label="Max output tokens slider"
+              className="settings-panel__range settings-panel__range-input-group-slider"
+              type="range"
+              min={MIN_MAX_OUTPUT_TOKENS}
+              max={MAX_MAX_OUTPUT_TOKENS}
+              step="1"
+              value={settings.maxOutputTokens}
+              onChange={(event) =>
+                onUpdate({ maxOutputTokens: Number.parseInt(event.target.value || '0', 10) })
+              }
+            />
+            <input
+              id="settings-max-output-tokens"
+              className="settings-panel__control settings-panel__range-input-group-number"
+              type="number"
+              min={MIN_MAX_OUTPUT_TOKENS}
+              max={MAX_MAX_OUTPUT_TOKENS}
+              step="1"
+              value={settings.maxOutputTokens}
+              onChange={(event) =>
+                onUpdate({ maxOutputTokens: Number.parseInt(event.target.value || '0', 10) })
+              }
+            />
+          </div>
         </FormField>
       </section>
 
