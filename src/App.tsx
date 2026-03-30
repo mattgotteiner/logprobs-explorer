@@ -111,7 +111,9 @@ function AppContent(): React.ReactElement {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isJsonPanelOpen, setIsJsonPanelOpen] = useState(false)
   const [prompt, setPrompt] = useState('')
+  const hasEndpoint = settings.endpoint.trim().length > 0
   const hasApiKey = settings.apiKey.trim().length > 0
+  const showRequiredSettingsBadge = !hasEndpoint || !hasApiKey
 
   const requestSummary = useMemo(
     () => {
@@ -187,7 +189,12 @@ function AppContent(): React.ReactElement {
                 </a>
               </div>
             }
-            trailing={<SettingsButton onClick={() => setIsSettingsOpen(true)} />}
+            trailing={
+              <SettingsButton
+                onClick={() => setIsSettingsOpen(true)}
+                showBadge={showRequiredSettingsBadge}
+              />
+            }
           />
         }
       >
