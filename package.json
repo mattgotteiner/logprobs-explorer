@@ -22,7 +22,7 @@
     "generate-icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
-    "@mattgotteiner/spa-ui-controls": "^0.1.0-main.6",
+    "@mattgotteiner/spa-ui-controls": "^0.1.0-main.7",
     "dexie": "^4.2.0",
     "openai": "^6.17.0",
     "react": "^19.0.0",
