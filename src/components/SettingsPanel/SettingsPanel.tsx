@@ -219,18 +219,38 @@ export function SettingsPanel({
           htmlFor="settings-top-logprobs"
           label="Top logprobs"
         >
-          <input
-            id="settings-top-logprobs"
-            className="settings-panel__control"
-            type="number"
-            min={MIN_TOP_LOGPROBS}
-            max={MAX_TOP_LOGPROBS}
-            step="1"
-            value={settings.topLogprobs}
-            onChange={(event) =>
-              onUpdate({ topLogprobs: Number.parseInt(event.target.value || '0', 10) })
-            }
-          />
+          <div className="settings-panel__range-input-group">
+            <div className="settings-panel__range-with-bounds">
+              <input
+                aria-label="Top logprobs slider"
+                className="settings-panel__range settings-panel__range-input-group-slider"
+                type="range"
+                min={MIN_TOP_LOGPROBS}
+                max={MAX_TOP_LOGPROBS}
+                step="1"
+                value={settings.topLogprobs}
+                onChange={(event) =>
+                  onUpdate({ topLogprobs: Number.parseInt(event.target.value || '0', 10) })
+                }
+              />
+              <div className="settings-panel__range-bounds" aria-hidden="true">
+                <span>{MIN_TOP_LOGPROBS}</span>
+                <span>{MAX_TOP_LOGPROBS}</span>
+              </div>
+            </div>
+            <input
+              id="settings-top-logprobs"
+              className="settings-panel__control settings-panel__range-input-group-number"
+              type="number"
+              min={MIN_TOP_LOGPROBS}
+              max={MAX_TOP_LOGPROBS}
+              step="1"
+              value={settings.topLogprobs}
+              onChange={(event) =>
+                onUpdate({ topLogprobs: Number.parseInt(event.target.value || '0', 10) })
+              }
+            />
+          </div>
         </FormField>
 
         <FormField
@@ -239,18 +259,24 @@ export function SettingsPanel({
           label="Max output tokens"
         >
           <div className="settings-panel__range-input-group">
-            <input
-              aria-label="Max output tokens slider"
-              className="settings-panel__range settings-panel__range-input-group-slider"
-              type="range"
-              min={MIN_MAX_OUTPUT_TOKENS}
-              max={MAX_MAX_OUTPUT_TOKENS}
-              step="1"
-              value={settings.maxOutputTokens}
-              onChange={(event) =>
-                onUpdate({ maxOutputTokens: Number.parseInt(event.target.value || '0', 10) })
-              }
-            />
+            <div className="settings-panel__range-with-bounds">
+              <input
+                aria-label="Max output tokens slider"
+                className="settings-panel__range settings-panel__range-input-group-slider"
+                type="range"
+                min={MIN_MAX_OUTPUT_TOKENS}
+                max={MAX_MAX_OUTPUT_TOKENS}
+                step="1"
+                value={settings.maxOutputTokens}
+                onChange={(event) =>
+                  onUpdate({ maxOutputTokens: Number.parseInt(event.target.value || '0', 10) })
+                }
+              />
+              <div className="settings-panel__range-bounds" aria-hidden="true">
+                <span>{MIN_MAX_OUTPUT_TOKENS}</span>
+                <span>{MAX_MAX_OUTPUT_TOKENS}</span>
+              </div>
+            </div>
             <input
               id="settings-max-output-tokens"
               className="settings-panel__control settings-panel__range-input-group-number"

@@ -112,18 +112,32 @@ function AppContent(): React.ReactElement {
   const hasApiKey = settings.apiKey.trim().length > 0
 
   const requestSummary = useMemo(
-    () => [
-      ['Model', settings.deploymentName.trim() || settings.modelName || 'Not set'],
-      ['Reasoning', 'none'],
-      ['Streaming', 'Enabled'],
-      ['Top logprobs', String(settings.topLogprobs)],
-      ['Max tokens', String(settings.maxOutputTokens)],
-    ],
+    () => {
+      const summary: Array<[string, string]> = [
+        ['Model', settings.deploymentName.trim() || settings.modelName || 'Not set'],
+        ['Top logprobs', String(settings.topLogprobs)],
+        ['Max tokens', String(settings.maxOutputTokens)],
+      ]
+
+      if (settings.temperatureEnabled) {
+        summary.splice(1, 0, ['Temperature', (settings.temperature ?? 1).toFixed(1)])
+      }
+
+      if (settings.topPEnabled) {
+        summary.splice(settings.temperatureEnabled ? 2 : 1, 0, ['Top P', (settings.topP ?? 1).toFixed(2)])
+      }
+
+      return summary
+    },
     [
       settings.deploymentName,
       settings.maxOutputTokens,
       settings.modelName,
+      settings.temperature,
+      settings.temperatureEnabled,
       settings.topLogprobs,
+      settings.topP,
+      settings.topPEnabled,
     ],
   )
 
@@ -238,16 +252,9 @@ function AppContent(): React.ReactElement {
                 {error ? (
                   <div className="app-callout app-callout--danger composer-error">
                     <p className="composer-error__title">Request failed</p>
-                    <p className="composer-error__message">{error.message}</p>
-                    {error.status !== undefined ||
-                    error.code ||
-                    error.type ||
-                    error.requestId ? (
+                    {error.status !== undefined ? (
                       <div className="composer-error__meta">
-                        {error.status !== undefined ? <span>Status {error.status}</span> : null}
-                        {error.code ? <span>Code {error.code}</span> : null}
-                        {error.type ? <span>Type {error.type}</span> : null}
-                        {error.requestId ? <span>Request ID {error.requestId}</span> : null}
+                        <span>Status {error.status}</span>
                       </div>
                     ) : null}
                     {error.body ? <pre className="composer-error__body">{error.body}</pre> : null}

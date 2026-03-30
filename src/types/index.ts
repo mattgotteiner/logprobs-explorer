@@ -79,7 +79,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   apiKey: '',
   deploymentName: '',
   endpoint: '',
-  maxOutputTokens: 5,
+  maxOutputTokens: 16,
   modelName: 'gpt-5.4-mini',
   temperature: 1,
   temperatureEnabled: false,

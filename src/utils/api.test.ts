@@ -52,7 +52,7 @@ describe('api utilities', () => {
 
     expect(request).toMatchObject({
       input: 'hello world',
-      max_output_tokens: 5,
+      max_output_tokens: 16,
       stream: true,
     })
   })
