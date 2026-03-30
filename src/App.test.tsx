@@ -162,10 +162,11 @@ describe('App', () => {
     render(<App />)
 
     expect(screen.getByRole('status')).toHaveTextContent(/streaming response/i)
-    expect(screen.getByText('Too many requests')).toBeInTheDocument()
+    expect(screen.queryByText('Too many requests')).not.toBeInTheDocument()
     expect(screen.getByText(/status 429/i)).toBeInTheDocument()
     expect(screen.queryByText(/code rate_limit_exceeded/i)).not.toBeInTheDocument()
-    expect(screen.getByText(/request id req_123/i)).toBeInTheDocument()
+    expect(screen.queryByText(/request id req_123/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/type rate_limit_error/i)).not.toBeInTheDocument()
     expect(screen.getByText('retry later')).toBeInTheDocument()
     expect(screen.getByText('Partial response')).toBeInTheDocument()
   })
