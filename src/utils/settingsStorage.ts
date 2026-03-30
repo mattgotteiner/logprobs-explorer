@@ -1,5 +1,13 @@
 import Dexie, { type Table } from 'dexie'
-import { APP_SETTINGS_STORAGE_KEY, DEFAULT_SETTINGS, type AppSettings } from '../types'
+import {
+  APP_SETTINGS_STORAGE_KEY,
+  DEFAULT_SETTINGS,
+  MAX_MAX_OUTPUT_TOKENS,
+  MAX_TOP_LOGPROBS,
+  MIN_MAX_OUTPUT_TOKENS,
+  MIN_TOP_LOGPROBS,
+  type AppSettings,
+} from '../types'
 import { removeStoredValue, setStoredValue } from './localStorage'
 
 const SETTINGS_STORAGE_VERSION = 1
@@ -77,8 +85,12 @@ function normalizeSettings(stored: Partial<AppSettings>): AppSettings {
     endpoint:
       typeof stored.endpoint === 'string' ? stored.endpoint : DEFAULT_SETTINGS.endpoint,
     maxOutputTokens:
-      normalizeNumber(stored.maxOutputTokens, DEFAULT_SETTINGS.maxOutputTokens, 1, 4096) ??
-      DEFAULT_SETTINGS.maxOutputTokens,
+      normalizeNumber(
+        stored.maxOutputTokens,
+        DEFAULT_SETTINGS.maxOutputTokens,
+        MIN_MAX_OUTPUT_TOKENS,
+        MAX_MAX_OUTPUT_TOKENS,
+      ) ?? DEFAULT_SETTINGS.maxOutputTokens,
     modelName:
       typeof stored.modelName === 'string' && stored.modelName.trim().length > 0
         ? stored.modelName
@@ -86,6 +98,13 @@ function normalizeSettings(stored: Partial<AppSettings>): AppSettings {
     temperature: normalizeNumber(stored.temperature, DEFAULT_SETTINGS.temperature, 0, 2),
     temperatureEnabled: stored.temperatureEnabled === true,
     theme: isTheme(stored.theme) ? stored.theme : DEFAULT_SETTINGS.theme,
+    topLogprobs:
+      normalizeNumber(
+        stored.topLogprobs,
+        DEFAULT_SETTINGS.topLogprobs,
+        MIN_TOP_LOGPROBS,
+        MAX_TOP_LOGPROBS,
+      ) ?? DEFAULT_SETTINGS.topLogprobs,
     topP: normalizeNumber(stored.topP, DEFAULT_SETTINGS.topP, 0, 1),
     topPEnabled: stored.topPEnabled === true,
   }

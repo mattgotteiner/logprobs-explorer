@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { DEFAULT_SETTINGS, TOP_LOGPROBS_COUNT } from '../types'
+import { DEFAULT_SETTINGS } from '../types'
 import { buildExplorerRequest, extractExplorerResult, normalizeEndpoint } from './api'
 
 describe('api utilities', () => {
@@ -22,6 +22,7 @@ describe('api utilities', () => {
       maxOutputTokens: 512,
       temperature: 0.4,
       temperatureEnabled: true,
+      topLogprobs: 7,
       topP: 0.9,
       topPEnabled: true,
     })
@@ -29,14 +30,13 @@ describe('api utilities', () => {
     expect(request).toMatchObject({
       include: ['message.output_text.logprobs'],
       input: 'hello world',
-      logprobs: true,
       max_output_tokens: 512,
       model: 'custom-deployment',
       reasoning: {
         effort: 'none',
       },
       temperature: 0.4,
-      top_logprobs: TOP_LOGPROBS_COUNT,
+      top_logprobs: 7,
       top_p: 0.9,
     })
   })
@@ -102,3 +102,4 @@ describe('api utilities', () => {
     expect(result.usage?.totalTokens).toBe(11)
   })
 })
+

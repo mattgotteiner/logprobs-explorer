@@ -5,7 +5,7 @@ import App from './App'
 import { APP_SETTINGS_STORAGE_KEY, DEFAULT_SETTINGS } from './types'
 
 describe('App', () => {
-  it('renders the explorer shell', () => {
+  it('renders the explorer shell with the disabled composer warning state', () => {
     render(<App />)
 
     expect(screen.getByRole('heading', { name: 'Logprobs Explorer' })).toBeInTheDocument()
@@ -19,9 +19,10 @@ describe('App', () => {
     expect(
       screen.getByRole('heading', { name: /token-by-token logprobs/i }),
     ).toBeInTheDocument()
+    expect(screen.getByLabelText('Input text')).toBeDisabled()
   })
 
-  it('opens settings and renders the explorer controls', async () => {
+  it('opens settings and renders the updated generation controls', async () => {
     const user = userEvent.setup()
     render(<App />)
 
@@ -31,7 +32,9 @@ describe('App', () => {
     expect(screen.getByLabelText('Endpoint URL')).toBeInTheDocument()
     expect(screen.getByLabelText('API key')).toBeInTheDocument()
     expect(screen.getByLabelText('Model')).toBeInTheDocument()
+    expect(screen.getByLabelText('Top logprobs')).toBeInTheDocument()
     expect(screen.getByLabelText('Max output tokens')).toBeInTheDocument()
+    expect(screen.getByLabelText('Max output tokens slider')).toBeInTheDocument()
     expect(screen.getByLabelText('Light')).toBeInTheDocument()
     expect(screen.getByLabelText('Dark')).toBeInTheDocument()
     expect(screen.getByLabelText('System')).toBeInTheDocument()
@@ -50,6 +53,7 @@ describe('App', () => {
           maxOutputTokens: 512,
           modelName: 'gpt-5.2',
           theme: 'dark',
+          topLogprobs: 7,
         },
         version: 1,
       }),
@@ -58,9 +62,23 @@ describe('App', () => {
     render(<App />)
     await user.click(screen.getByLabelText('Open settings'))
 
+    expect(screen.getByText(/model:/i)).toBeInTheDocument()
     expect(screen.getByText('logprobs-mini')).toBeInTheDocument()
-    expect(screen.getByText('512')).toBeInTheDocument()
     expect(screen.getByDisplayValue('https://example.openai.azure.com')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('7')).toBeInTheDocument()
+    expect(screen.getByLabelText('Max output tokens')).toHaveValue(512)
+    expect(screen.getByLabelText('Max output tokens slider')).toHaveValue('512')
+  })
+
+  it('enables the input text after entering an API key', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByLabelText('Open settings'))
+    await user.type(screen.getByLabelText('Endpoint URL'), 'https://example.openai.azure.com')
+    await user.type(screen.getByLabelText('API key'), 'secret-key')
+
+    expect(screen.getByLabelText('Input text')).toBeEnabled()
   })
 })
 

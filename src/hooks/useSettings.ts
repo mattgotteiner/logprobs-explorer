@@ -2,7 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   DEFAULT_SETTINGS,
   MAX_MAX_OUTPUT_TOKENS,
+  MAX_TOP_LOGPROBS,
   MIN_MAX_OUTPUT_TOKENS,
+  MIN_TOP_LOGPROBS,
   type AppSettings,
 } from '../types'
 import {
@@ -29,6 +31,7 @@ function normalizeSettings(candidate: AppSettings): AppSettings {
       candidate.temperature === undefined
         ? DEFAULT_SETTINGS.temperature
         : clampNumber(candidate.temperature, 0, 2),
+    topLogprobs: clampNumber(candidate.topLogprobs, MIN_TOP_LOGPROBS, MAX_TOP_LOGPROBS),
     topP:
       candidate.topP === undefined
         ? DEFAULT_SETTINGS.topP
@@ -127,3 +130,4 @@ export function useSettings(): UseSettingsReturn {
     updateSettings,
   }
 }
+

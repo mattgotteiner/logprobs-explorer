@@ -65,6 +65,20 @@
   accent-color: var(--spa-color-primary);
 }
 
+.settings-panel__range-input-group {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.settings-panel__range-input-group-slider {
+  flex: 1 1 auto;
+}
+
+.settings-panel__range-input-group-number {
+  flex: 0 0 112px;
+}
+
 .settings-checkbox {
   align-items: flex-start;
   background-color: var(--spa-color-surface);
@@ -93,3 +107,15 @@
   flex-wrap: wrap;
   gap: 0.75rem;
 }
+
+@media (max-width: 560px) {
+  .settings-panel__range-input-group {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .settings-panel__range-input-group-number {
+    flex-basis: auto;
+  }
+}
+

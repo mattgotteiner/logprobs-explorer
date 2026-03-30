@@ -15,6 +15,7 @@ describe('useSettings', () => {
     expect(result.current.settings.theme).toBe('system')
     expect(result.current.settings.maxOutputTokens).toBe(256)
     expect(result.current.settings.temperatureEnabled).toBe(false)
+    expect(result.current.settings.topLogprobs).toBe(5)
   })
 
   it('persists updates to localStorage using the versioned settings shape', () => {
@@ -29,6 +30,7 @@ describe('useSettings', () => {
         temperature: 0.3,
         temperatureEnabled: true,
         theme: 'dark',
+        topLogprobs: 7,
         topP: 0.85,
         topPEnabled: true,
       })
@@ -42,8 +44,8 @@ describe('useSettings', () => {
     expect(persisted.settings.maxOutputTokens).toBe(777)
     expect(persisted.settings.modelName).toBe('gpt-5.2')
     expect(persisted.settings.temperature).toBe(0.3)
-    expect(persisted.settings.topP).toBe(0.85)
     expect(persisted.settings.theme).toBe('dark')
+    expect(persisted.settings.topLogprobs).toBe(7)
+    expect(persisted.settings.topP).toBe(0.85)
   })
 })
-
