@@ -112,18 +112,32 @@ function AppContent(): React.ReactElement {
   const hasApiKey = settings.apiKey.trim().length > 0
 
   const requestSummary = useMemo(
-    () => [
-      ['Model', settings.deploymentName.trim() || settings.modelName || 'Not set'],
-      ['Reasoning', 'none'],
-      ['Streaming', 'Enabled'],
-      ['Top logprobs', String(settings.topLogprobs)],
-      ['Max tokens', String(settings.maxOutputTokens)],
-    ],
+    () => {
+      const summary: Array<[string, string]> = [
+        ['Model', settings.deploymentName.trim() || settings.modelName || 'Not set'],
+        ['Top logprobs', String(settings.topLogprobs)],
+        ['Max tokens', String(settings.maxOutputTokens)],
+      ]
+
+      if (settings.temperatureEnabled) {
+        summary.splice(1, 0, ['Temperature', (settings.temperature ?? 1).toFixed(1)])
+      }
+
+      if (settings.topPEnabled) {
+        summary.splice(settings.temperatureEnabled ? 2 : 1, 0, ['Top P', (settings.topP ?? 1).toFixed(2)])
+      }
+
+      return summary
+    },
     [
       settings.deploymentName,
       settings.maxOutputTokens,
       settings.modelName,
+      settings.temperature,
+      settings.temperatureEnabled,
       settings.topLogprobs,
+      settings.topP,
+      settings.topPEnabled,
     ],
   )
 

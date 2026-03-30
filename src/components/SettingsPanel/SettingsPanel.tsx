@@ -219,18 +219,32 @@ export function SettingsPanel({
           htmlFor="settings-top-logprobs"
           label="Top logprobs"
         >
-          <input
-            id="settings-top-logprobs"
-            className="settings-panel__control"
-            type="number"
-            min={MIN_TOP_LOGPROBS}
-            max={MAX_TOP_LOGPROBS}
-            step="1"
-            value={settings.topLogprobs}
-            onChange={(event) =>
-              onUpdate({ topLogprobs: Number.parseInt(event.target.value || '0', 10) })
-            }
-          />
+          <div className="settings-panel__range-input-group">
+            <input
+              aria-label="Top logprobs slider"
+              className="settings-panel__range settings-panel__range-input-group-slider"
+              type="range"
+              min={MIN_TOP_LOGPROBS}
+              max={MAX_TOP_LOGPROBS}
+              step="1"
+              value={settings.topLogprobs}
+              onChange={(event) =>
+                onUpdate({ topLogprobs: Number.parseInt(event.target.value || '0', 10) })
+              }
+            />
+            <input
+              id="settings-top-logprobs"
+              className="settings-panel__control settings-panel__range-input-group-number"
+              type="number"
+              min={MIN_TOP_LOGPROBS}
+              max={MAX_TOP_LOGPROBS}
+              step="1"
+              value={settings.topLogprobs}
+              onChange={(event) =>
+                onUpdate({ topLogprobs: Number.parseInt(event.target.value || '0', 10) })
+              }
+            />
+          </div>
         </FormField>
 
         <FormField

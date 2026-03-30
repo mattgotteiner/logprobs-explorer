@@ -1,5 +1,5 @@
 import type { ExplorerErrorDetails, ExplorerResult } from './types'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -69,6 +69,7 @@ describe('App', () => {
     expect(screen.getByLabelText('API key')).toBeInTheDocument()
     expect(screen.getByLabelText('Model')).toBeInTheDocument()
     expect(screen.getByLabelText('Top logprobs')).toBeInTheDocument()
+    expect(screen.getByLabelText('Top logprobs slider')).toBeInTheDocument()
     expect(screen.getByLabelText('Max output tokens')).toBeInTheDocument()
     expect(screen.getByLabelText('Max output tokens slider')).toBeInTheDocument()
     expect(screen.getByLabelText('Light')).toBeInTheDocument()
@@ -101,9 +102,33 @@ describe('App', () => {
     expect(screen.getByText(/model:/i)).toBeInTheDocument()
     expect(screen.getByText('logprobs-mini')).toBeInTheDocument()
     expect(screen.getByDisplayValue('https://example.openai.azure.com')).toBeInTheDocument()
-    expect(screen.getByDisplayValue('7')).toBeInTheDocument()
+    expect(screen.getByLabelText('Top logprobs')).toHaveValue(7)
+    expect(screen.getByLabelText('Top logprobs slider')).toHaveValue('7')
     expect(screen.getByLabelText('Max output tokens')).toHaveValue(512)
     expect(screen.getByLabelText('Max output tokens slider')).toHaveValue('512')
+  })
+
+  it('shows only configurable sampling details in the request summary', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    const requestSummary = screen.getByLabelText('Request summary')
+
+    expect(within(requestSummary).queryByText('Reasoning:')).not.toBeInTheDocument()
+    expect(within(requestSummary).queryByText('Streaming:')).not.toBeInTheDocument()
+    expect(within(requestSummary).queryByText('Temperature:')).not.toBeInTheDocument()
+    expect(within(requestSummary).queryByText('Top P:')).not.toBeInTheDocument()
+
+    await user.click(screen.getByLabelText('Open settings'))
+
+    const [temperatureToggle, topPToggle] = screen.getAllByRole('checkbox')
+    await user.click(temperatureToggle)
+    await user.click(topPToggle)
+
+    expect(within(requestSummary).getByText('Temperature:')).toBeInTheDocument()
+    expect(within(requestSummary).getByText('Top P:')).toBeInTheDocument()
+    expect(within(requestSummary).getByText('1.0')).toBeInTheDocument()
+    expect(within(requestSummary).getByText('1.00')).toBeInTheDocument()
   })
 
   it('enables the input text after entering an API key', async () => {
