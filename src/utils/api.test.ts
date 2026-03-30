@@ -118,6 +118,34 @@ describe('api utilities', () => {
     expect(result.usage?.totalTokens).toBe(11)
   })
 
+  it('falls back to nested output text when the top-level output_text is missing', () => {
+    const result = extractExplorerResult(
+      {
+        output: [
+          {
+            content: [
+              {
+                text: 'Hello',
+                type: 'output_text',
+              },
+              {
+                text: ' world',
+                type: 'output_text',
+              },
+            ],
+            type: 'message',
+          },
+        ],
+        status: 'completed',
+      },
+      {
+        input: 'hello world',
+      },
+    )
+
+    expect(result.outputText).toBe('Hello world')
+  })
+
   it('normalizes API errors with status and body details', () => {
     const error = APIError.generate(
       429,

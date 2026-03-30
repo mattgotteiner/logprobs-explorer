@@ -40,7 +40,7 @@ export function useLogprobsExplorer(): UseLogprobsExplorerReturn {
         setStreamedOutputText(nextProgress.outputText)
       })
       setResult(nextResult)
-      setStreamedOutputText(nextResult.outputText)
+      setStreamedOutputText((currentOutputText) => nextResult.outputText || currentOutputText)
       setProgress(null)
     } catch (nextError) {
       setError(toExplorerErrorDetails(nextError))

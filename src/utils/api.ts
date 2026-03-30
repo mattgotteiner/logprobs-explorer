@@ -140,6 +140,39 @@ function extractTokenEntries(response: Record<string, unknown>): TokenLogprobEnt
   return tokenEntries
 }
 
+function extractOutputText(response: Record<string, unknown>): string {
+  const directOutputText = getString(response.output_text)
+  if (directOutputText !== undefined) {
+    return directOutputText
+  }
+
+  if (!Array.isArray(response.output)) {
+    return ''
+  }
+
+  let outputText = ''
+
+  for (const outputItem of response.output) {
+    if (
+      !isRecord(outputItem) ||
+      outputItem.type !== 'message' ||
+      !Array.isArray(outputItem.content)
+    ) {
+      continue
+    }
+
+    for (const contentPart of outputItem.content) {
+      if (!isRecord(contentPart) || contentPart.type !== 'output_text') {
+        continue
+      }
+
+      outputText += getString(contentPart.text) ?? ''
+    }
+  }
+
+  return outputText
+}
+
 function extractIncompleteReason(response: Record<string, unknown>): string | undefined {
   if (!isRecord(response.incomplete_details)) {
     return undefined
@@ -263,7 +296,7 @@ export function extractExplorerResult(
 
   return {
     incompleteReason: extractIncompleteReason(response),
-    outputText: getString(response.output_text) ?? '',
+    outputText: extractOutputText(response),
     request,
     status: getString(response.status),
     tokenEntries: extractTokenEntries(response),
