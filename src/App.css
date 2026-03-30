@@ -18,7 +18,7 @@
 
 .app-subtitle-link {
   align-items: center;
-  color: var(--color-text-muted);
+  color: var(--spa-color-text-muted);
   display: inline-flex;
   flex-shrink: 0;
   justify-content: center;
@@ -27,7 +27,7 @@
 
 @media (hover: hover) {
   .app-subtitle-link:hover {
-    color: var(--color-text);
+    color: var(--spa-color-text);
   }
 }
 
@@ -38,8 +38,8 @@
 }
 
 .app-layout .spa-panel {
-  background-color: var(--color-surface-elevated);
-  border-color: var(--color-border);
+  background-color: var(--spa-color-surface-elevated);
+  border-color: var(--spa-color-border);
 }
 
 .explorer-panel {
@@ -63,7 +63,7 @@
 }
 
 .explorer-panel__eyebrow {
-  color: var(--color-text-muted);
+  color: var(--spa-color-text-muted);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -78,7 +78,7 @@
 }
 
 .explorer-panel__body {
-  color: var(--color-text-secondary);
+  color: var(--spa-color-text-secondary);
   margin: 0;
 }
 
@@ -113,10 +113,10 @@
 }
 
 .composer__textarea {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background-color: var(--spa-color-bg);
+  border: 1px solid var(--spa-color-border-muted);
   border-radius: 12px;
-  color: var(--color-text);
+  color: var(--spa-color-text);
   min-height: 128px;
   padding: 0.875rem 1rem;
   resize: vertical;
@@ -129,8 +129,8 @@
 
 .request-progress {
   align-items: flex-start;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background-color: var(--spa-color-bg);
+  border: 1px solid var(--spa-color-border-muted);
   border-radius: 12px;
   display: flex;
   gap: 0.75rem;
@@ -139,9 +139,9 @@
 
 .request-progress__spinner {
   animation: request-progress-spin 0.9s linear infinite;
-  border: 2px solid var(--color-border);
+  border: 2px solid var(--spa-color-border-muted);
   border-radius: 999px;
-  border-top-color: var(--color-text);
+  border-top-color: var(--spa-color-text);
   flex-shrink: 0;
   height: 1rem;
   margin-top: 0.2rem;
@@ -160,7 +160,7 @@
 }
 
 .request-progress__detail {
-  color: var(--color-text-secondary);
+  color: var(--spa-color-text-secondary);
   margin: 0;
 }
 
@@ -187,8 +187,8 @@
 }
 
 .composer-error__body {
-  background-color: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
+  background-color: var(--spa-color-surface);
+  border: 1px solid var(--spa-color-border);
   border-radius: 10px;
   color: inherit;
   margin: 0;
@@ -199,7 +199,7 @@
 }
 
 .request-summary {
-  color: var(--color-text-muted);
+  color: var(--spa-color-text-muted);
   display: flex;
   flex-wrap: wrap;
   font-size: 0.86rem;
@@ -217,8 +217,8 @@
 }
 
 .response-panel {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background-color: var(--spa-color-surface);
+  border: 1px solid var(--spa-color-border);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -249,15 +249,15 @@
 .response-panel__meta,
 .response-panel__usage,
 .response-panel__empty {
-  color: var(--color-text-secondary);
+  color: var(--spa-color-text-secondary);
   margin: 0;
 }
 
 .response-panel__text {
-  background-color: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
+  background-color: var(--spa-color-surface-elevated);
+  border: 1px solid var(--spa-color-border);
   border-radius: 10px;
-  color: var(--color-text);
+  color: var(--spa-color-text);
   margin: 0;
   overflow-x: auto;
   padding: 0.9rem 1rem;
@@ -265,10 +265,10 @@
 }
 
 .response-panel__json-button {
-  background-color: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
+  background-color: var(--spa-color-surface-elevated);
+  border: 1px solid var(--spa-color-border);
   border-radius: 10px;
-  color: var(--color-text);
+  color: var(--spa-color-text);
   cursor: pointer;
   font: inherit;
   min-height: 2.1rem;
@@ -297,8 +297,8 @@
 }
 
 .token-card {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background-color: var(--spa-color-surface);
+  border: 1px solid var(--spa-color-border);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -314,7 +314,7 @@
 }
 
 .token-card__eyebrow {
-  color: var(--color-text-muted);
+  color: var(--spa-color-text-muted);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -330,7 +330,7 @@
 }
 
 .token-card__summary {
-  color: var(--color-text-secondary);
+  color: var(--spa-color-text-secondary);
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -338,7 +338,7 @@
 }
 
 .token-card__bytes {
-  color: var(--color-text-secondary);
+  color: var(--spa-color-text-secondary);
   font-size: 0.9rem;
 }
 
@@ -349,14 +349,14 @@
 
 .token-table th,
 .token-table td {
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--spa-color-border);
   padding: 0.65rem 0.5rem;
   text-align: left;
   vertical-align: top;
 }
 
 .token-table th {
-  color: var(--color-text-muted);
+  color: var(--spa-color-text-muted);
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -364,10 +364,10 @@
 }
 
 .results-empty {
-  background-color: var(--color-surface);
-  border: 1px dashed var(--color-border);
+  background-color: var(--spa-color-surface);
+  border: 1px dashed var(--spa-color-border);
   border-radius: 12px;
-  color: var(--color-text-secondary);
+  color: var(--spa-color-text-secondary);
   padding: 1rem;
 }
 
