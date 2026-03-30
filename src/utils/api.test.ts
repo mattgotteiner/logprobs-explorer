@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
+import { APIError } from 'openai/error'
 import { DEFAULT_SETTINGS } from '../types'
-import { buildExplorerRequest, extractExplorerResult, normalizeEndpoint } from './api'
+import {
+  buildExplorerRequest,
+  extractExplorerResult,
+  normalizeEndpoint,
+  toExplorerErrorDetails,
+} from './api'
 
 describe('api utilities', () => {
   it('normalizes Azure OpenAI endpoints to /openai/v1', () => {
@@ -38,6 +44,16 @@ describe('api utilities', () => {
       temperature: 0.4,
       top_logprobs: 7,
       top_p: 0.9,
+    })
+  })
+
+  it('adds stream mode when requested', () => {
+    const request = buildExplorerRequest('hello world', DEFAULT_SETTINGS, { stream: true })
+
+    expect(request).toMatchObject({
+      input: 'hello world',
+      max_output_tokens: 5,
+      stream: true,
     })
   })
 
@@ -100,6 +116,68 @@ describe('api utilities', () => {
     expect(result.tokenEntries[0]?.probability).toBeCloseTo(Math.exp(-0.2))
     expect(result.tokenEntries[0]?.topCandidates[1]?.token).toBe('Hi')
     expect(result.usage?.totalTokens).toBe(11)
+  })
+
+  it('falls back to nested output text when the top-level output_text is missing', () => {
+    const result = extractExplorerResult(
+      {
+        output: [
+          {
+            content: [
+              {
+                text: 'Hello',
+                type: 'output_text',
+              },
+              {
+                text: ' world',
+                type: 'output_text',
+              },
+            ],
+            type: 'message',
+          },
+        ],
+        status: 'completed',
+      },
+      {
+        input: 'hello world',
+      },
+    )
+
+    expect(result.outputText).toBe('Hello world')
+  })
+
+  it('normalizes API errors with status and body details', () => {
+    const error = APIError.generate(
+      429,
+      {
+        error: {
+          code: 'rate_limit_exceeded',
+          message: 'Too many requests',
+          type: 'rate_limit_error',
+        },
+      },
+      undefined,
+      new Headers({
+        'x-request-id': 'req_123',
+      }),
+    )
+
+    expect(toExplorerErrorDetails(error)).toEqual({
+      body: JSON.stringify(
+        {
+          code: 'rate_limit_exceeded',
+          message: 'Too many requests',
+          type: 'rate_limit_error',
+        },
+        null,
+        2,
+      ),
+      code: 'rate_limit_exceeded',
+      message: 'Too many requests',
+      requestId: 'req_123',
+      status: 429,
+      type: 'rate_limit_error',
+    })
   })
 })
 
